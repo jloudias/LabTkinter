@@ -124,6 +124,43 @@ def abrir_arquivo(event=None):
             content_text.insert(1.0, file.read())
 
 
+def salvar_arquivo(event=None):
+    global file_name
+    if not file_name:
+        salvar_arquivo_como()
+    else:
+        escrever_no_arquivo(file_name)
+    return "break"
+
+
+def salvar_arquivo_como(event=None):
+    input_file_name = tk.filedialog.asksaveasfilename(
+        defaultextension=".txt",
+        filetypes=[("All Files", "*.*"), ("Text Documents", "*.txt")])
+    if input_file_name:
+        global file_name
+        file_name = input_file_name
+        escrever_no_arquivo(file_name)
+        root.title(f"{os.path.basename(file_name)} - {PROGRAMA_NOME}")
+    return "break"
+
+
+def novo_arquivo(event=None):
+    root.title("Sem título")
+    global file_name
+    file_name = None
+    content_text.delete(1.0, tk.END)
+
+
+def escrever_no_arquivo(file_name):
+    try:
+        content = content_text.get(1.0, tk.END)
+        with open(file_name, 'w') as the_file:
+            the_file.write(content)
+    except IOError:
+        pass
+
+
 # ============
 # Imagens
 # ============
@@ -151,7 +188,7 @@ menu_arquivo.add_command(
     compound="left",  # habilita imagem ao lado do texto
     underline=0,
     image=ICONE_NOVO,
-    command=faz_nada,
+    command=novo_arquivo,
 )
 menu_arquivo.add_command(
     label="Abrir",
@@ -167,14 +204,14 @@ menu_arquivo.add_command(
     compound="left",
     underline=0,
     image=ICONE_SALVAR,
-    command=faz_nada,
+    command=salvar_arquivo,
 )
 menu_arquivo.add_command(
     label="Salvar como",
     accelerator="Shift+Ctrl+S",
     compound="left",
     underline=0,
-    command=faz_nada,
+    command=salvar_arquivo_como,
 )
 menu_arquivo.add_separator()
 menu_arquivo.add_command(
@@ -346,6 +383,12 @@ content_text.bind('<Control-y>', refazer)
 content_text.bind('<Control-Y>', refazer)
 content_text.bind('<Control-A>', selecionar_tudo)
 content_text.bind('<Control-a>', selecionar_tudo)
+content_text.bind('<Control-o>', abrir_arquivo)
+content_text.bind('<Control-O>', abrir_arquivo)
+content_text.bind('<Control-s>', salvar_arquivo)
+content_text.bind('<Control-S>', salvar_arquivo)
+content_text.bind('<Control-n>', novo_arquivo)
+content_text.bind('<Control-N>', novo_arquivo)
 
 content_text.pack(expand=1, fill="both")
 
