@@ -4,7 +4,6 @@ from tkinter import messagebox
 from tkinter import filedialog
 from PIL import ImageTk, Image
 import ctypes
-import sys
 import os
 
 ctypes.windll.shcore.SetProcessDpiAwareness(1)  # otimiza resolução da GUI do TKINTER
@@ -161,6 +160,19 @@ def escrever_no_arquivo(file_name):
         pass
 
 
+def exibir_mensagem_sobre(event=None):
+    messagebox.showinfo("Sôbre...", f"{PROGRAMA_NOME}\n\nTkinter Gui Application\nDevelopment Blueprints")
+
+
+def exibir_mensagem_ajuda(event=None):
+    messagebox.showinfo("Ajuda", "Help Book: \nTkinter Gui Application\nDevelopment Blueprints", icon='question')
+
+
+def sair(event=None):
+    if messagebox.askokcancel("Sair?.", "Finalizar o programa?"):
+        root.destroy()
+
+
 # ============
 # Imagens
 # ============
@@ -219,7 +231,7 @@ menu_arquivo.add_command(
     accelerator="Alt+F4",
     compound="left",
     underline=0,
-    command=sys.exit,
+    command=sair,
 )
 
 menu_bar.add_cascade(label="Arquivo", menu=menu_arquivo)  # ---  Fim do Menu Arquivo ---
@@ -335,14 +347,14 @@ menu_ajuda = tk.Menu(menu_bar, tearoff=0)
 menu_ajuda.add_command(
     label="Ajuda",
     compound="left",
-    command=faz_nada,
+    command=exibir_mensagem_ajuda,
 )
 
 menu_ajuda.add_separator()
 
 menu_ajuda.add_command(
     label="Sobre...",
-    command=faz_nada,
+    command=exibir_mensagem_sobre,
 )
 
 menu_bar.add_cascade(label="Ajuda", menu=menu_ajuda)
@@ -389,6 +401,7 @@ content_text.bind('<Control-s>', salvar_arquivo)
 content_text.bind('<Control-S>', salvar_arquivo)
 content_text.bind('<Control-n>', novo_arquivo)
 content_text.bind('<Control-N>', novo_arquivo)
+content_text.bind('<KeyPress-F1>', exibir_mensagem_ajuda)
 
 content_text.pack(expand=1, fill="both")
 
@@ -399,4 +412,5 @@ content_text.configure(yscrollcommand=scroll_bar.set)
 scroll_bar.config(command=content_text.yview)
 scroll_bar.pack(side="right", fill="y")
 
+root.protocol("WM_DELETE_WINDOW", sair)
 root.mainloop()
