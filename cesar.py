@@ -51,6 +51,7 @@ SIMBOLOS = [
 FONT_LABEL = ("Arial", 8, "bold")
 PADX = 5
 PADY = 5
+PROGRAMA_NOME = "Cifra de César"
 
 
 def aplicar_cesar() -> None:
@@ -108,12 +109,22 @@ def habilitar_ok(event=None):
     return "break"
 
 
+def exibir_sobre():
+    messagebox.showinfo("Sôbre...", f"{PROGRAMA_NOME}\n\npor Jorge Loureiro Dias")
+
+
 # JANELA PRINCIPAL -> root
 # =========================
 root = tk.Tk()
-root.title("Cifra de César")
+root.title(PROGRAMA_NOME)
 root.geometry("670x470")
 root.resizable(False, False)
+
+# BARRA DE MENU
+menu_barra = tk.Menu(root)
+menu_ajuda = tk.Menu(menu_barra, tearoff=0)
+menu_ajuda.add_command(label="Sobre...", compound="left", command=exibir_sobre)
+menu_barra.add_cascade(label="Ajuda", menu=menu_ajuda)
 
 # FRAME ESQUERDO
 # ==============
@@ -188,4 +199,5 @@ btn_ok.grid(column=0, row=0, padx=PADX, pady=10)
 btn_limpar.grid(column=1, row=0, padx=PADX, pady=10)
 btn_sair.grid(column=2, row=0, padx=PADX, pady=10)
 
+root.config(menu=menu_barra)
 root.mainloop()
