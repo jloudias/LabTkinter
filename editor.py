@@ -184,6 +184,7 @@ ICONE_REFAZER = ImageTk.PhotoImage(Image.open("icons/redo.gif"))
 ICONE_RECORTAR = ImageTk.PhotoImage(Image.open("icons/cut.gif"))
 ICONE_COPIAR = ImageTk.PhotoImage(Image.open("icons/copy.gif"))
 ICONE_COLAR = ImageTk.PhotoImage(Image.open("icons/paste.gif"))
+ICONE_LOCALIZAR = ImageTk.PhotoImage(Image.open("icons/find_text.gif"))
 
 # ==============
 # BARRA DE MENUS
@@ -366,6 +367,26 @@ root.config(menu=menu_bar)
 # =======================
 shortcut_bar = tk.Frame(root, height=25, background="light sea green")
 shortcut_bar.pack(expand=0, fill="x")
+# criando os botões com imagem e comando
+btn_novo_arquivo = tk.Button(shortcut_bar, image=ICONE_NOVO, command=novo_arquivo)
+btn_abrir_arquivo = tk.Button(shortcut_bar, image=ICONE_ABRIR, command=abrir_arquivo)
+btn_salvar_arquivo = tk.Button(shortcut_bar, image=ICONE_SALVAR, command=salvar_arquivo)
+btn_recortar = tk.Button(shortcut_bar, image=ICONE_RECORTAR, command=recortar)
+btn_copiar = tk.Button(shortcut_bar, image=ICONE_COPIAR, command=copiar)
+btn_colar = tk.Button(shortcut_bar, image=ICONE_COLAR, command=colar)
+btn_desfazer = tk.Button(shortcut_bar, image=ICONE_DESFAZER, command=desfazer)
+btn_refazer = tk.Button(shortcut_bar, image=ICONE_REFAZER, command=refazer)
+btn_localizar = tk.Button(shortcut_bar, image=ICONE_LOCALIZAR, command=localizar)
+# pack no frame
+btn_novo_arquivo.pack(side="left")
+btn_abrir_arquivo.pack(side="left")
+btn_salvar_arquivo.pack(side="left")
+btn_recortar.pack(side="left")
+btn_copiar.pack(side="left")
+btn_colar.pack(side="left")
+btn_desfazer.pack(side="left")
+btn_refazer.pack(side="left")
+btn_localizar.pack(side="left")
 
 # ==========================
 # BARRA DE NÚMERO DAS LINHAS
