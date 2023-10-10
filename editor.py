@@ -19,11 +19,12 @@ root.resizable(False, False)
 
 
 def faz_nada():
-    messagebox.showinfo(title="Aviso", message="Não fiz nada!!")
+    messagebox.showinfo(title="Aviso", message="Sou uma função que não faz nada!!")
 
 
 def recortar():
     content_text.event_generate("<<Cut>>")  # texto tem que ser em inglês
+    on_content_changed()
     return 'break'  # avisa ao sistema q o evento foi executado e q não deve mais ser propagado
 
 
@@ -34,16 +35,19 @@ def copiar():
 
 def colar():
     content_text.event_generate("<<Paste>>")  # texto tem que ser em inglês
+    on_content_changed()
     return 'break'
 
 
 def desfazer():
     content_text.event_generate("<<Undo>>")
+    on_content_changed()
     return 'break'
 
 
 def refazer(_event=None):  # _ na frente do nome da variavel informa ao pycharm que ela não sera utilizada
     content_text.event_generate("<<Redo>>")
+    on_content_changed()
     return 'break'
 
 
@@ -171,6 +175,23 @@ def exibir_mensagem_ajuda(event=None):
 def sair(event=None):
     if messagebox.askokcancel("Sair?.", "Finalizar o programa?"):
         root.destroy()
+
+
+def get_line_numbers():
+    output = ''
+    if show_line_number.get():
+        row, col = content_text.index("end").split('.')
+        for i in range(1, int(row)):
+            output += str(i) + '\n'
+    return output
+
+
+def update_line_numbers():
+    pass
+
+
+def on_content_changed(event=None):
+    update_line_numbers()
 
 
 # ============
@@ -302,15 +323,15 @@ menu_bar.add_cascade(label="Editar", menu=menu_editar)
 # -------------
 menu_exibir = tk.Menu(menu_bar, tearoff=0)
 
-exibir_numero_linha = tk.IntVar()
-exibir_numero_linha.set(1)
+show_line_number = tk.IntVar()
+show_line_number.set(1)
 menu_exibir.add_checkbutton(
-    label="Exibir número da linha", variable=exibir_numero_linha
+    label="Exibir número da linha", variable=show_line_number
 )
 
-exibir_cursor_info = tk.IntVar()
-exibir_cursor_info.set(1)
-menu_exibir.add_checkbutton(label="Exibir cursor no fundo", variable=exibir_cursor_info)
+show_cursor_info = tk.IntVar()
+show_cursor_info.set(1)
+menu_exibir.add_checkbutton(label="Exibir cursor no fundo", variable=show_cursor_info)
 
 destacar_linha_atual = tk.IntVar()
 menu_exibir.add_checkbutton(
@@ -423,7 +444,7 @@ content_text.bind('<Control-S>', salvar_arquivo)
 content_text.bind('<Control-n>', novo_arquivo)
 content_text.bind('<Control-N>', novo_arquivo)
 content_text.bind('<KeyPress-F1>', exibir_mensagem_ajuda)
-
+content_text.bind('<Any-KeyPress>', on_content_changed)
 content_text.pack(expand=1, fill="both")
 
 # Barra de rolagem
