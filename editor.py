@@ -186,7 +186,7 @@ def get_line_numbers():
         # row, col recebem sequencialmente os valores da lista gerada acima
 
         for i in range(1, int(row)):
-            output += str(i) + '\n'   # output é uma string contendo os números da linhas seguidos de \n
+            output += str(i) + '\n'  # output é uma string contendo os números da linhas seguidos de \n
     return output
 
 
@@ -200,6 +200,23 @@ def update_line_numbers(event=None):
 
 def on_content_changed(event=None):
     update_line_numbers()
+
+
+def highlight_line(interval=100):
+    content_text.tag_remove("active_line", 1.0, tk.END)
+    content_text.tag_add("active_line", "insert linestart", "insert lineend+1c")
+    content_text.after(interval, toggle_highlight)
+
+
+def undo_highlight():
+    content_text.tag_remove("active_line", 1.0, tk.END)
+
+
+def toggle_highlight(event=None):
+    if to_highlight_line.get():
+        highlight_line()
+    else:
+        undo_highlight()
 
 
 # ============
@@ -341,9 +358,9 @@ show_cursor_info = tk.IntVar()
 show_cursor_info.set(1)
 menu_exibir.add_checkbutton(label="Exibir cursor no fundo", variable=show_cursor_info)
 
-destacar_linha_atual = tk.IntVar()
+to_highlight_line = tk.IntVar()
 menu_exibir.add_checkbutton(
-    label="Destacar linha atual", variable=destacar_linha_atual, onvalue=1, offvalue=0
+    label="Destacar linha atual", variable=to_highlight_line, onvalue=1, offvalue=0, command=toggle_highlight
 )
 
 menu_exibir.add_separator()
@@ -436,7 +453,7 @@ line_number_bar.pack(side="left", fill="y")
 # TEXTO PRINCIPAL
 # ==================================
 content_text = tk.Text(root, wrap="word", undo=True)
-
+content_text.tag_configure('active_line', background='ivory2')
 # Eventos
 # -------
 content_text.bind('<Control-F>', localizar)
