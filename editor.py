@@ -181,13 +181,21 @@ def get_line_numbers():
     output = ''
     if show_line_number.get():
         row, col = content_text.index("end").split('.')
+        # content_text.index("end") retorna uma string com a posição do final do arquivo no formato '3.0'
+        # slipt('.') retorna uma lista com dois valores da string acima
+        # row, col recebem sequencialmente os valores da lista gerada acima
+
         for i in range(1, int(row)):
-            output += str(i) + '\n'
+            output += str(i) + '\n'   # output é uma string contendo os números da linhas seguidos de \n
     return output
 
 
-def update_line_numbers():
-    pass
+def update_line_numbers(event=None):
+    line_numbers = get_line_numbers()
+    line_number_bar.config(state='normal')
+    line_number_bar.delete('1.0', tk.END)
+    line_number_bar.insert('1.0', line_numbers)
+    line_number_bar.config(state='disabled')
 
 
 def on_content_changed(event=None):

@@ -1,6 +1,6 @@
 # Laboratório de Interfaces Gráficas
 
-* desenvolvimento de interfaces com Tkinter
+* desenvolvimento de interfaces gráficas (GUI) com Tkinter
 * bibliotecas requeridas:
   - Pillow
   - pyperclip
