@@ -198,8 +198,24 @@ def update_line_numbers(event=None):
     line_number_bar.config(state='disabled')
 
 
+def show_cursor_info_bar():
+    show_cursor_info_checked = show_cursor_info.get()
+    if show_cursor_info_checked:
+        cursor_info_bar.pack(expand=0, fill='none', side='right', anchor='se')
+    else:
+        cursor_info_bar.pack_forget()
+
+
+def update_cursor_info_bar():
+    row, col = content_text.index('insert').split('.')
+    line_num, col_num = str(int(row)), str(int(col) + 1)
+    infotext = f"Line: {line_num} | Column: {col_num}"
+    cursor_info_bar.config(text=infotext)
+
+
 def on_content_changed(event=None):
     update_line_numbers()
+    update_cursor_info_bar()
 
 
 def highlight_line(interval=100):
@@ -356,7 +372,7 @@ menu_exibir.add_checkbutton(
 
 show_cursor_info = tk.IntVar()
 show_cursor_info.set(1)
-menu_exibir.add_checkbutton(label="Exibir cursor no fundo", variable=show_cursor_info)
+menu_exibir.add_checkbutton(label="Exibir posição do cursor", variable=show_cursor_info, command=show_cursor_info_bar)
 
 to_highlight_line = tk.IntVar()
 menu_exibir.add_checkbutton(
@@ -454,6 +470,7 @@ line_number_bar.pack(side="left", fill="y")
 # ==================================
 content_text = tk.Text(root, wrap="word", undo=True)
 content_text.tag_configure('active_line', background='ivory2')
+
 # Eventos
 # -------
 content_text.bind('<Control-F>', localizar)
@@ -478,6 +495,12 @@ scroll_bar = tk.Scrollbar(content_text)
 content_text.configure(yscrollcommand=scroll_bar.set)
 scroll_bar.config(command=content_text.yview)
 scroll_bar.pack(side="right", fill="y")
+
+# Cursor
+# NOTE: position on code matters
+# ------
+cursor_info_bar = tk.Label(content_text, text="Line: 1 | Column: 1")
+cursor_info_bar.pack(expand=0, fill='none', side='right', anchor='se')
 
 root.protocol("WM_DELETE_WINDOW", sair)
 root.mainloop()
