@@ -235,6 +235,17 @@ def toggle_highlight(event=None):
         undo_highlight()
 
 
+def change_theme(event=None):
+    selected_theme = theme_choice.get()
+    fg_bg_colors = color_schemes.get(selected_theme)
+    foreground_color, background_color = fg_bg_colors.split('.')
+    content_text.config(background=background_color, fg=foreground_color)
+
+
+def show_popup_menu(event):
+    popup_menu.tk_popup(event.x_root, event.y_root)
+
+
 # ============
 # Imagens
 # ============
@@ -396,10 +407,10 @@ color_schemes = {
     "Olive Green": "#D1E7E0.#5B8340",
     "Night Mode": "#FFFFFF.#000000",
 }
-tema_escolhido = tk.StringVar()
-tema_escolhido.set("Default")
+theme_choice = tk.StringVar()
+theme_choice.set("Default")
 for k in sorted(color_schemes):
-    menu_temas.add_radiobutton(label=k, variable=tema_escolhido)
+    menu_temas.add_radiobutton(label=k, variable=theme_choice, command=change_theme)
 
 menu_bar.add_cascade(label="Exibir", menu=menu_exibir)
 
@@ -501,6 +512,17 @@ scroll_bar.pack(side="right", fill="y")
 # ------
 cursor_info_bar = tk.Label(content_text, text="Line: 1 | Column: 1")
 cursor_info_bar.pack(expand=0, fill='none', side='right', anchor='se')
+
+# Context menu
+# -------------
+popup_menu = tk.Menu(content_text)
+for i in ('recortar', 'copiar', 'colar', 'desfazer', 'refazer'):
+    cmd = eval(i)
+    popup_menu.add_command(label=i, compound='left', command=cmd)
+popup_menu.add_separator()
+popup_menu.add_command(label='Selecionar Tudo', underline=7, command=selecionar_tudo)
+
+content_text.bind('<Button-3>', show_popup_menu)
 
 root.protocol("WM_DELETE_WINDOW", sair)
 root.mainloop()
