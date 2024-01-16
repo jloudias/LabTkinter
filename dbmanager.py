@@ -25,14 +25,58 @@ class MemberConnect:
         Search = StringVar()
         MemIDBar = StringVar()
 
-        # =======================
+        # ========
+        # FUNÇÕES
+        # ========
+
+        def addNew():
+            if MemID.get() == "" or FirstName.get() == "" or Surname.get() == "":
+                tkinter.messagebox.showerror(
+                    "Error check input", "Enter correct member details"
+                )
+            else:
+                sqlCon = pymysql.connect(
+                    host="localhost", user="dsv", password="jld0856", database="members"
+                )
+                qry = f"INSERT INTO member VALUES('{MemID.get()}','{FirstName.get()}','{Surname.get()}','{Address.get()}','{POBox.get()}','{Gender.get()}','{Mobile.get()}','{Email.get()}','{MType.get()}')"
+                
+                cur = sqlCon.cursor()
+                cur.execute(qry)
+                sqlCon.commit()
+                ShowRecord()
+                sqlCon.close()
+                tkinter.messagebox.showinfo("Data Entry Form", "Record entered successfully")
+
+        def ShowRecord():
+            sqlCon = pymysql.connect(
+                    host="localhost", user="dsv", password="jld0856", database="members"
+                )
+            qry = "SELECT * FROM member"
+
+            cur = sqlCon.cursor()
+            cur.execute(qry)
+
+            rs = cur.fetchall()
+
+            if len(rs) != 0:
+                self.member_records.delete(*self.member_records.get_children())
+                for row in rs:
+                    self.member_records.insert('', END, values=row)
+                sqlCon.commit()
+                sqlCon.close()
+
+
+
+
+
+        # ====================
         # DEFININDO OS FRAMES
-        # =======================
+        # ====================
         #
         # Main Frame - Janela Principal
         MainFrame = Frame(
             self.root, bd=10, width=1350, height=700, relief=RIDGE, bg="cadetblue"
-        ) # RIDGE = define efeito 3D do frame (FLAT, RAISED, SUNKEN, GROOVE)
+        )  # RIDGE = define efeito 3D do frame (FLAT, RAISED, SUNKEN, GROOVE)
         MainFrame.grid()
 
         # TitleFrame - Título
@@ -49,7 +93,7 @@ class MemberConnect:
         MidFrame = Frame(MainFrame, bd=5, width=1340, height=500, relief=RIDGE)
         MidFrame.grid(row=2, column=0)
 
-        # MembersDetailsFRM - Dados de um membro específico 
+        # MembersDetailsFRM - Dados de um membro específico
         MembersDetailsFrm = Frame(
             MidFrame, bd=5, width=1340, height=100, padx=6, pady=4, relief=RIDGE
         )
@@ -66,7 +110,6 @@ class MemberConnect:
             MidFrame, bd=7, width=1340, height=50, bg="cadetblue", relief=RIDGE
         )
         ButtonFrame.grid(row=2, column=0)
-        
 
         # ===============================
         # POPULANDO OS FRAMES
@@ -81,7 +124,7 @@ class MemberConnect:
 
         # MEMBROS (MembersDetailsFrm)
         # ---------------------------
-        
+
         # MemID
         self.lblmemberID = Label(
             MembersDetailsFrm,
@@ -266,17 +309,32 @@ class MemberConnect:
             font=("arial", 12, "bold"),
             width=33,
             textvariable=MType,
-            state='readonly'
+            state="readonly",
         )
-        self.cboType['values'] = ('Member Type', 'Annual Member', 'Quartely', 'Monthly')
+        self.cboType["values"] = ("Member Type", "Annual Member", "Quartely", "Monthly")
         self.cboType.current(0)
         self.cboType.grid(row=2, column=5)
-        
+
         # LISTA DE REGISTROS (TreeviewFrm)
         # --------------------------------
-        
-        scroll_y = Scrollbar(TreeviewFrm, orient= "vertical")
-        self.member_records = ttk.Treeview(TreeviewFrm, height=12, columns=("memid","firstname", "surname", "address", "pobox","gender", "mobile", "email", "mtype"), yscrollcommand=scroll_y.set)
+
+        scroll_y = Scrollbar(TreeviewFrm, orient="vertical")
+        self.member_records = ttk.Treeview(
+            TreeviewFrm,
+            height=12,
+            columns=(
+                "memid",
+                "firstname",
+                "surname",
+                "address",
+                "pobox",
+                "gender",
+                "mobile",
+                "email",
+                "mtype",
+            ),
+            yscrollcommand=scroll_y.set,
+        )
         scroll_y.pack(side=RIGHT, fill=Y)
 
         self.member_records.heading("memid", text="MemberID")
@@ -289,14 +347,14 @@ class MemberConnect:
         self.member_records.heading("email", text="Email")
         self.member_records.heading("mtype", text="Member Type")
 
-        self.member_records['show'] = 'headings'
+        self.member_records["show"] = "headings"
 
-        self.member_records.column("memid", width=120)
+        self.member_records.column("memid", width=110)
         self.member_records.column("firstname", width=140)
         self.member_records.column("surname", width=140)
         self.member_records.column("address", width=212)
         self.member_records.column("pobox", width=120)
-        self.member_records.column("gender", width=120)
+        self.member_records.column("gender", width=110)
         self.member_records.column("mobile", width=120)
         self.member_records.column("email", width=212)
         self.member_records.column("mtype", width=120)
@@ -304,23 +362,105 @@ class MemberConnect:
         self.member_records.pack(fill=BOTH, expand=1)
 
         # SearchFrm - Pesquisa
-        self.lblBarCode = Label(SearchFrame, font=('arial',12,'bold'), text = "Bar Code")
+        self.lblBarCode = Label(
+            SearchFrame, font=("arial", 12, "bold"), text="Bar Code"
+        )
         self.lblBarCode.grid(row=0, column=0, sticky=W, padx=4)
-        self.txtBarCode = Entry(SearchFrame, font=('CCode39', 13, 'bold'), bd=5, width=26, justify='center', textvariable=MemIDBar)
+        self.txtBarCode = Entry(
+            SearchFrame,
+            font=("CCode39", 13, "bold"),
+            bd=5,
+            width=28,
+            justify="center",
+            textvariable=MemIDBar,
+        )
         self.txtBarCode.grid(row=0, column=1, padx=39)
 
-        self.txtSearch = Entry(SearchFrame, font=('arial', 16, 'bold'), bd=5, width=33, justify='right', textvariable=Search)
+        self.txtSearch = Entry(
+            SearchFrame,
+            font=("arial", 18, "bold"),
+            bd=5,
+            width=33,
+            justify="right",
+            textvariable=Search,
+        )
         self.txtSearch.grid(row=0, column=2)
 
-        self.btnSearch = Button(SearchFrame, pady=1, padx=29, bd=4, font=('arial', 16, 'bold'), width=9, height=1, text='Search', bg='cadetblue').grid(row=0, column=3, padx=1)
+        self.btnSearch = Button(
+            SearchFrame,
+            pady=1,
+            padx=29,
+            bd=4,
+            font=("arial", 16, "bold"),
+            width=9,
+            height=1,
+            text="Search",
+            bg="cadetblue",
+        ).grid(row=0, column=3, padx=1)
 
-        #ButtonFrame - Botões de ação (CRUD)
-        self.btnAddNew = Button(ButtonFrame, pady=1, padx=26, bd=4, font=('arial', 16, 'bold'), width=12, height=1, text='AddNew').grid(row=0, column=0, padx=1)
-        self.btnShowRecord = Button(ButtonFrame, pady=1, padx=26, bd=4, font=('arial', 16, 'bold'), width=12, height=1, text='Show Record').grid(row=0, column=1, padx=1)
-        self.btnUpdate = Button(ButtonFrame, pady=1, padx=26, bd=4, font=('arial', 16, 'bold'), width=12, height=1, text='Update').grid(row=0, column=2, padx=1)
-        self.btnDelete = Button(ButtonFrame, pady=1, padx=26, bd=4, font=('arial', 16, 'bold'), width=12, height=1, text='Delete').grid(row=0, column=3, padx=1)
-        self.btnReset = Button(ButtonFrame, pady=1, padx=26, bd=4, font=('arial', 16, 'bold'), width=12, height=1, text='Reset').grid(row=0, column=4, padx=1)
-        self.btnExit = Button(ButtonFrame, pady=1, padx=26, bd=4, font=('arial', 16, 'bold'), width=12, height=1, text='Exit').grid(row=0, column=5, padx=1)
+        # ButtonFrame - Botões de ação (CRUD)
+        self.btnAddNew = Button(
+            ButtonFrame,
+            pady=1,
+            padx=23,
+            bd=4,
+            font=("arial", 16, "bold"),
+            width=12,
+            height=1,
+            text="AddNew",
+            command=addNew
+        ).grid(row=0, column=0, padx=1)
+        self.btnShowRecord = Button(
+            ButtonFrame,
+            pady=1,
+            padx=23,
+            bd=4,
+            font=("arial", 16, "bold"),
+            width=12,
+            height=1,
+            text="Show Record",
+            command=ShowRecord,
+        ).grid(row=0, column=1, padx=1)
+        self.btnUpdate = Button(
+            ButtonFrame,
+            pady=1,
+            padx=23,
+            bd=4,
+            font=("arial", 16, "bold"),
+            width=12,
+            height=1,
+            text="Update",
+        ).grid(row=0, column=2, padx=1)
+        self.btnDelete = Button(
+            ButtonFrame,
+            pady=1,
+            padx=23,
+            bd=4,
+            font=("arial", 16, "bold"),
+            width=12,
+            height=1,
+            text="Delete",
+        ).grid(row=0, column=3, padx=1)
+        self.btnReset = Button(
+            ButtonFrame,
+            pady=1,
+            padx=23,
+            bd=4,
+            font=("arial", 16, "bold"),
+            width=12,
+            height=1,
+            text="Reset",
+        ).grid(row=0, column=4, padx=1)
+        self.btnExit = Button(
+            ButtonFrame,
+            pady=1,
+            padx=23,
+            bd=4,
+            font=("arial", 16, "bold"),
+            width=12,
+            height=1,
+            text="Exit",
+        ).grid(row=0, column=5, padx=1)
 
 
 if __name__ == "__main__":
