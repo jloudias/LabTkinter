@@ -65,6 +65,68 @@ class MemberConnect:
                 sqlCon.commit()
                 sqlCon.close()
 
+        def MembersInfo(ev):
+            viewInfo = self.member_records.focus()
+            learnerData = self.member_records.item(viewInfo)
+            row=learnerData['values']
+
+            MemID.set(row[0])
+            FirstName.set(row[1])
+            Surname.set(row[2])
+            Address.set(row[3])
+            POBox.set(row[4])
+            Gender.set(row[5])
+            Mobile.set(row[6])
+            Email.set(row[7])
+            MType.set(row[8])
+
+        def update():
+            sqlCon = pymysql.connect(
+                    host="localhost", user="dsv", password="jld0856", database="members"
+                )
+            qry = f"UPDATE member SET firstname='{FirstName.get()}', surname='{Surname.get()}', address='{Address.get()}', pobox='{POBox.get()}', gender='{Gender.get()}', mobile='{Mobile.get()}', email='{Email.get()}',mtype='{MType.get()}' WHERE memid='{MemID.get()}'"
+
+            cur = sqlCon.cursor()
+            cur.execute(qry)
+
+            sqlCon.commit()
+            ShowRecord()
+            sqlCon.close()
+            tkinter.messagebox.showinfo("Data Entry Form", "Record Updated Successfully.")
+
+        def deleteDB():
+            sqlCon = pymysql.connect(
+                    host="localhost", user="dsv", password="jld0856", database="members"
+                )
+            qry = f"DELETE FROM member WHERE memid='{MemID.get()}'"
+
+            cur=sqlCon.cursor()
+            cur.execute(qry)
+
+            sqlCon.commit()
+            ShowRecord()
+            sqlCon.close()
+            tkinter.messagebox.showinfo("Data Entry Form", "Record DELETED Successfully.")
+
+        def Reset():
+            MemID.set('')
+            FirstName.set('')
+            Surname.set('')
+            Address.set('')
+            POBox.set('')
+            Gender.set('')
+            Mobile.set('')
+            Email.set('')
+            MType.set('')
+
+        def iExit():
+            iExit = tkinter.messagebox.askyesno("Data Entry Form", "Confirm if you want to exit.")
+            if iExit>0:
+                root.destroy()
+                return
+            
+
+
 
 
 
@@ -360,6 +422,8 @@ class MemberConnect:
         self.member_records.column("mtype", width=120)
 
         self.member_records.pack(fill=BOTH, expand=1)
+        self.member_records.bind("<ButtonRelease-1>", MembersInfo)
+        ShowRecord()
 
         # SearchFrm - Pesquisa
         self.lblBarCode = Label(
@@ -430,6 +494,7 @@ class MemberConnect:
             width=12,
             height=1,
             text="Update",
+            command=update,
         ).grid(row=0, column=2, padx=1)
         self.btnDelete = Button(
             ButtonFrame,
@@ -440,6 +505,7 @@ class MemberConnect:
             width=12,
             height=1,
             text="Delete",
+            command=deleteDB,
         ).grid(row=0, column=3, padx=1)
         self.btnReset = Button(
             ButtonFrame,
@@ -450,6 +516,7 @@ class MemberConnect:
             width=12,
             height=1,
             text="Reset",
+            command=Reset,
         ).grid(row=0, column=4, padx=1)
         self.btnExit = Button(
             ButtonFrame,
@@ -460,6 +527,7 @@ class MemberConnect:
             width=12,
             height=1,
             text="Exit",
+            command= iExit,
         ).grid(row=0, column=5, padx=1)
 
 
