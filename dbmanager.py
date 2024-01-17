@@ -30,6 +30,7 @@ class MemberConnect:
         # ========
 
         def addNew():
+            MemRef()
             if MemID.get() == "" or FirstName.get() == "" or Surname.get() == "":
                 tkinter.messagebox.showerror(
                     "Error check input", "Enter correct member details"
@@ -165,6 +166,13 @@ class MemberConnect:
 
             sqlCon.close()
             Search.set("")
+
+        def MemRef():
+            RefNo = random.randint(12489,987899)
+            RefBar = (str(RefNo))
+            MemID.set(RefBar)
+            RefBC = ("Membership Number" + str(RefNo))
+            MemIDBar.set(RefBC)
 
 
         # ====================
