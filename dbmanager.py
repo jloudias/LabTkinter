@@ -39,18 +39,20 @@ class MemberConnect:
                     host="localhost", user="dsv", password="jld0856", database="members"
                 )
                 qry = f"INSERT INTO member VALUES('{MemID.get()}','{FirstName.get()}','{Surname.get()}','{Address.get()}','{POBox.get()}','{Gender.get()}','{Mobile.get()}','{Email.get()}','{MType.get()}')"
-                
+
                 cur = sqlCon.cursor()
                 cur.execute(qry)
                 sqlCon.commit()
                 ShowRecord()
                 sqlCon.close()
-                tkinter.messagebox.showinfo("Data Entry Form", "Record entered successfully")
+                tkinter.messagebox.showinfo(
+                    "Data Entry Form", "Record entered successfully"
+                )
 
         def ShowRecord():
             sqlCon = pymysql.connect(
-                    host="localhost", user="dsv", password="jld0856", database="members"
-                )
+                host="localhost", user="dsv", password="jld0856", database="members"
+            )
             qry = "SELECT * FROM member"
 
             cur = sqlCon.cursor()
@@ -61,14 +63,14 @@ class MemberConnect:
             if len(rs) != 0:
                 self.member_records.delete(*self.member_records.get_children())
                 for row in rs:
-                    self.member_records.insert('', END, values=row)
+                    self.member_records.insert("", END, values=row)
                 sqlCon.commit()
                 sqlCon.close()
 
         def MembersInfo(ev):
             viewInfo = self.member_records.focus()
             learnerData = self.member_records.item(viewInfo)
-            row=learnerData['values']
+            row = learnerData["values"]
 
             MemID.set(row[0])
             FirstName.set(row[1])
@@ -82,8 +84,8 @@ class MemberConnect:
 
         def update():
             sqlCon = pymysql.connect(
-                    host="localhost", user="dsv", password="jld0856", database="members"
-                )
+                host="localhost", user="dsv", password="jld0856", database="members"
+            )
             qry = f"UPDATE member SET firstname='{FirstName.get()}', surname='{Surname.get()}', address='{Address.get()}', pobox='{POBox.get()}', gender='{Gender.get()}', mobile='{Mobile.get()}', email='{Email.get()}',mtype='{MType.get()}' WHERE memid='{MemID.get()}'"
 
             cur = sqlCon.cursor()
@@ -92,43 +94,77 @@ class MemberConnect:
             sqlCon.commit()
             ShowRecord()
             sqlCon.close()
-            tkinter.messagebox.showinfo("Data Entry Form", "Record Updated Successfully.")
+            tkinter.messagebox.showinfo(
+                "Data Entry Form", "Record Updated Successfully."
+            )
 
         def deleteDB():
             sqlCon = pymysql.connect(
-                    host="localhost", user="dsv", password="jld0856", database="members"
-                )
+                host="localhost", user="dsv", password="jld0856", database="members"
+            )
             qry = f"DELETE FROM member WHERE memid='{MemID.get()}'"
 
-            cur=sqlCon.cursor()
+            cur = sqlCon.cursor()
             cur.execute(qry)
 
             sqlCon.commit()
             ShowRecord()
             sqlCon.close()
-            tkinter.messagebox.showinfo("Data Entry Form", "Record DELETED Successfully.")
+            tkinter.messagebox.showinfo(
+                "Data Entry Form", "Record DELETED Successfully."
+            )
 
         def Reset():
-            MemID.set('')
-            FirstName.set('')
-            Surname.set('')
-            Address.set('')
-            POBox.set('')
-            Gender.set('')
-            Mobile.set('')
-            Email.set('')
-            MType.set('')
+            MemID.set("")
+            FirstName.set("")
+            Surname.set("")
+            Address.set("")
+            POBox.set("")
+            Gender.set("")
+            Mobile.set("")
+            Email.set("")
+            MType.set("")
 
         def iExit():
-            iExit = tkinter.messagebox.askyesno("Data Entry Form", "Confirm if you want to exit.")
-            if iExit>0:
+            iExit = tkinter.messagebox.askyesno(
+                "Data Entry Form", "Confirm if you want to exit."
+            )
+            if iExit > 0:
                 root.destroy()
                 return
-            
 
+        def searchDG():
+            try:
+                sqlCon = pymysql.connect(
+                    host="localhost", user="dsv", password="jld0856", database="members"
+                )
+                qry = f"SELECT * FROM member WHERE memid='{Search.get()}'"
 
+                cur = sqlCon.cursor()
+                cur.execute(qry)
 
+                row = cur.fetchone()
+                
+                MemID.set(row[0])
+                FirstName.set(row[1])
+                Surname.set(row[2])
+                Address.set(row[3])
+                POBox.set(row[4])
+                Gender.set(row[5])
+                Mobile.set(row[6])
+                Email.set(row[7])
+                MType.set(row[8])
 
+                sqlCon.commit()                
+
+            except Exception as e:
+                message = f"No such record.\nProblem: {e}"
+                tkinter.messagebox.showinfo("Data Entry Form", message=message)
+                Search.set("")
+                Reset()
+
+            sqlCon.close()
+            Search.set("")
 
 
         # ====================
@@ -460,6 +496,7 @@ class MemberConnect:
             height=1,
             text="Search",
             bg="cadetblue",
+            command=searchDG
         ).grid(row=0, column=3, padx=1)
 
         # ButtonFrame - Botões de ação (CRUD)
@@ -472,7 +509,7 @@ class MemberConnect:
             width=12,
             height=1,
             text="AddNew",
-            command=addNew
+            command=addNew,
         ).grid(row=0, column=0, padx=1)
         self.btnShowRecord = Button(
             ButtonFrame,
@@ -527,7 +564,7 @@ class MemberConnect:
             width=12,
             height=1,
             text="Exit",
-            command= iExit,
+            command=iExit,
         ).grid(row=0, column=5, padx=1)
 
 
