@@ -37,7 +37,7 @@ class DrumMachine:
     def __init__(self, root) -> None:
         self.root = root
         self.root.title(PROGRAM_NAME)
-        self.root.geometry("800x450")
+        self.root.geometry("600x300")
         self.beats_per_minute = INITIAL_BEATS_PER_MINUTE
         self.current_pattern_index = 0
         self.drum_load_entry_widget = [None] * MAX_NUMBER_OF_DRUM_SAMPLES
@@ -45,6 +45,49 @@ class DrumMachine:
 
         self.init_all_patterns()
         self.init_gui()
+    
+    #
+    # Getters ans Setters
+    #
+    
+    def get_current_pattern_dict(self):
+        return self.all_patterns[self.current_pattern_index]
+    
+    def get_bpu(self):
+        return self.get_current_pattern_dict()['bpu']
+
+    def set_bpu(self):
+        self.get_current_pattern_dict()['bpu'] = int(self.bpu_widget.get())
+
+    def get_number_of_units(self):
+        return self.get_current_pattern_dict()['number_of_units']
+
+    def set_number_of_units(self):
+        self.get_current_pattern_dict(
+        )['number_of_units'] = int(self.number_of_units_widget.get())
+
+    def get_list_of_drum_files(self):
+        return self.get_current_pattern_dict()['list_of_drum_files']
+
+    def get_drum_file_path(self, drum_index):
+        return self.get_list_of_drum_files()[drum_index]
+
+    def set_drum_file_path(self, drum_index, file_path):
+        self.get_list_of_drum_files()[drum_index] = file_path
+
+    def get_is_button_clicked_list(self):
+        return self.get_current_pattern_dict()['is_button_clicked_list']
+
+    def set_is_button_clicked_list(self, num_of_rows, num_of_columns):
+        self.get_current_pattern_dict()['is_button_clicked_list'] = [
+            [False] * num_of_columns for x in range(num_of_rows)]
+        
+    def get_beats_per_minute(self):
+        return self.get_current_pattern_dict()['beats_per_minute']
+    
+    def set_beats_per_minute(self):
+        self.get_current_pattern_dict()['beats_per_minute'] = self.beats_per_minute.get()
+
 
     def init_all_patterns(self):
         self.all_patterns = [
@@ -140,7 +183,7 @@ class DrumMachine:
                 command=self.on_open_file_button_clicked(i),
             )
             open_file_button.image = open_file_icon
-            open_file_button.grid(row=i, column=0, padx=5, pady=4)
+            open_file_button.grid(row=i, column=0, padx=5, pady=2)
             self.drum_load_entry_widget[i] = Entry(left_frame)
             self.drum_load_entry_widget[i].grid(row=i, column=4, padx=7, pady=4)
 
