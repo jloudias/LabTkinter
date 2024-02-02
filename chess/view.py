@@ -8,12 +8,22 @@ class View:
 
     board_color_1 = BOARD_COLOR_1
     board_color_2 = BOARD_COLOR_2
-
+    #
+    # CONSTRUCTOR
+    #
     def __init__(self, parent, controller):
         self.parent = parent
         self.controller = controller
         self.create_chess_base()
         self.canvas.bind("<Button-1>", self.on_square_clicked)
+    #
+    # CHESS BASE
+    #
+    def create_chess_base(self):
+        self.create_top_menu()
+        self.create_canvas()
+        self.draw_board()
+        self.create_bottom_frame()
 
     #
     # MENU BEGIN -------------------------
@@ -51,29 +61,24 @@ class View:
         pass
 
     def on_exit_clicked(self):
-        if messagebox.askyesno("Exit", "Are you sure?"):
+        if messagebox.askyesno("Exit", " Are you sure?"):
             self.parent.destroy()
 
     def on_preferences_menu_clicked(self):
         pass
 
     def on_about_menu_clicked(self):
-        pass
-
+        messagebox.showinfo("Tkinter Blueprints:","    Chess Game\n\n adapted by Jorge L" )
     # MENU END -----------------------------------------
-    
-    # CANVAS BEGIN -------------------------------------
 
+    #
+    # BOARD BEGIN -------------------------------------
+    #
     def create_canvas(self):
         canvas_width = NUMBER_OF_COLUMNS * DIMENSION_OF_EACH_SQUARE
         canvas_height = NUMBER_OF_ROWS * DIMENSION_OF_EACH_SQUARE
         self.canvas = Canvas(self.parent, width=canvas_width, height=canvas_height)
         self.canvas.pack(padx=8, pady=8)
-
-    def on_square_clicked(self, event):
-        clicked_row, clicked_column = self.get_clicked_row_column(event)
-        print("Hey you clicked on", clicked_row, clicked_column)
-
 
     def draw_board(self):
         current_color = BOARD_COLOR_2
@@ -82,32 +87,43 @@ class View:
             for col in range(NUMBER_OF_COLUMNS):
                 x1, y1 = self.get_x_y_coordinate(row, col)
                 x2, y2 = x1 + DIMENSION_OF_EACH_SQUARE, y1 + DIMENSION_OF_EACH_SQUARE
-                self.canvas.create_rectangle(
-                    x1, y1, x2, y2,  fill=current_color)
+                self.canvas.create_rectangle(x1, y1, x2, y2, fill=current_color)
                 current_color = self.get_alternate_color(current_color)
-
 
     def get_alternate_color(self, current_color):
         if current_color == self.board_color_2:
             next_color = self.board_color_1
         else:
-            next_color=self.board_color_2
+            next_color = self.board_color_2
         return next_color
-    
+
     def get_x_y_coordinate(self, row, col):
-        x = (col * DIMENSION_OF_EACH_SQUARE)
-        y = ((7 - row) * DIMENSION_OF_EACH_SQUARE)
+        x = col * DIMENSION_OF_EACH_SQUARE
+        y = (7 - row) * DIMENSION_OF_EACH_SQUARE
         return (x, y)
+    # BOARD END -----------------------------------
+
+    def get_clicked_row_column(self, event):
+        col_size = row_size = DIMENSION_OF_EACH_SQUARE
+        clicked_column = event.x // col_size 
+        #NOTE: the operator // divides the first number by the second number and rounds the result down to the nearest integer (or whole number)
+        clicked_row = 7 - (event.y // row_size)
+        return (clicked_row, clicked_column)
+
+    def on_square_clicked(self, event):
+        clicked_row, clicked_column = self.get_clicked_row_column(event)
+        messagebox.showinfo("Click", f" Hey you clicked on position {clicked_row},{clicked_column}")
+        # print("Hey you clicked on", clicked_row, clicked_column)
+    #
+    # BOTTOM FRAME BEGIN -------------
+    #
+    def create_bottom_frame(self):
+        self.bottom_frame = Frame(self.parent, height=64)
+        self.info_label = Label(self.bottom_frame, text="   White to Start the Game   ", fg=BOARD_COLOR_2)
+        self.info_label.pack(side=RIGHT, padx=8, pady=5)
+        self.bottom_frame.pack(fill="x", side="bottom")
     
-
-    def create_botton_frame(self):
-        pass
-
-    def create_chess_base(self):
-        self.create_top_menu()
-        self.create_canvas()
-        self.draw_board()
-        self.create_botton_frame()
+    # BOTTOM FRAME END ----------------
 
 
 def main(controller):
