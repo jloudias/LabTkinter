@@ -8,6 +8,7 @@ class View:
 
     board_color_1 = BOARD_COLOR_1
     board_color_2 = BOARD_COLOR_2
+
     #
     # CONSTRUCTOR
     #
@@ -16,6 +17,7 @@ class View:
         self.controller = controller
         self.create_chess_base()
         self.canvas.bind("<Button-1>", self.on_square_clicked)
+
     #
     # CHESS BASE
     #
@@ -44,6 +46,7 @@ class View:
         self.parent.config(menu=self.menu_bar)
 
     def create_edit_menu(self):
+        """create edit menu, add menu itens, cascade itens and attach menu bar to main window"""
         self.edit_menu = Menu(self.menu_bar, tearoff=0)
         self.edit_menu.add_command(
             label="Preferences", command=self.on_preferences_menu_clicked
@@ -52,6 +55,7 @@ class View:
         self.parent.config(menu=self.menu_bar)
 
     def create_about_menu(self):
+        """create about menu, add menu itens, cascade itens and attach menu bar to main window"""
         self.about_menu = Menu(self.menu_bar, tearoff=0)
         self.about_menu.add_command(label="About", command=self.on_about_menu_clicked)
         self.menu_bar.add_cascade(label="About", menu=self.about_menu)
@@ -68,7 +72,10 @@ class View:
         pass
 
     def on_about_menu_clicked(self):
-        messagebox.showinfo("Tkinter Blueprints:","    Chess Game\n\n adapted by Jorge L" )
+        messagebox.showinfo(
+            "Tkinter Blueprints:", "    Chess Game\n\n adapted by Jorge L"
+        )
+
     # MENU END -----------------------------------------
 
     #
@@ -101,28 +108,34 @@ class View:
         x = col * DIMENSION_OF_EACH_SQUARE
         y = (7 - row) * DIMENSION_OF_EACH_SQUARE
         return (x, y)
+
     # BOARD END -----------------------------------
 
     def get_clicked_row_column(self, event):
         col_size = row_size = DIMENSION_OF_EACH_SQUARE
-        clicked_column = event.x // col_size 
-        #NOTE: the operator // divides the first number by the second number and rounds the result down to the nearest integer (or whole number)
+        clicked_column = event.x // col_size
+        # NOTE: the operator // divides the first number by the second number and rounds the result down to the nearest integer (or whole number)
         clicked_row = 7 - (event.y // row_size)
         return (clicked_row, clicked_column)
 
     def on_square_clicked(self, event):
         clicked_row, clicked_column = self.get_clicked_row_column(event)
-        messagebox.showinfo("Click", f" Hey you clicked on position {clicked_row},{clicked_column}")
+        messagebox.showinfo(
+            "Click", f" Hey you clicked on position {clicked_row},{clicked_column}"
+        )
         # print("Hey you clicked on", clicked_row, clicked_column)
+
     #
     # BOTTOM FRAME BEGIN -------------
     #
     def create_bottom_frame(self):
         self.bottom_frame = Frame(self.parent, height=64)
-        self.info_label = Label(self.bottom_frame, text="   White to Start the Game   ", fg=BOARD_COLOR_2)
+        self.info_label = Label(
+            self.bottom_frame, text="   White to Start the Game   ", fg="black"
+        )
         self.info_label.pack(side=RIGHT, padx=8, pady=5)
         self.bottom_frame.pack(fill="x", side="bottom")
-    
+
     # BOTTOM FRAME END ----------------
 
 
