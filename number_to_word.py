@@ -3,6 +3,7 @@ from tkinter import ttk
 from tkinter import messagebox
 import pyperclip as pc
 from num2words import num2words as nw
+from PIL import ImageTk, Image
 
 LANGUAGE = "pt_BR"
 FONT_LABEL = ("Arial", 9, "normal")
@@ -38,6 +39,7 @@ def clear_all():
     op.set = 1
     number_text.delete("1.0", "end-1c")
     number_text.configure(state="disabled")
+    txt_number.focus()
 
 
 def copy_text():
@@ -58,14 +60,41 @@ def copy_text():
 
 root = Tk()
 root.title("Num2Word")
-root.geometry("400x320")
+root.geometry("500x320")
 root.resizable(False, False)
 
 str_number = StringVar()
 str_number.set("")
 
-main_frame = Frame(root)
-main_frame.pack(side=TOP, expand=True, fill="both")
+right_frame = Frame(root, width=100, bg="black")
+right_frame.pack(side="left", fill="y")
+
+img = ImageTk.PhotoImage(Image.open("images/number.png"))
+lbl_imagem = Label(right_frame, image=img, width=50, height=50, bg="black")
+lbl_imagem.pack(pady=15)
+
+style = ttk.Style()
+# style.theme_use("vista")
+style.configure("my.TButton", foreground="black", background="black")
+
+btn_submit = ttk.Button(
+    right_frame, text="Submit", width=8, command=convert_number, style="my.TButton"
+)
+btn_submit.pack(padx=10, pady=12)
+
+btn_clear = ttk.Button(
+    right_frame, text="Clear All", width=8, command=clear_all, style="my.TButton"
+)
+btn_clear.pack(padx=10, pady=12)
+
+btn_copy = ttk.Button(
+    right_frame, text="Copy", width=8, command=copy_text, style="my.TButton"
+)
+btn_copy.pack(padx=10, pady=12)
+
+
+main_frame = Frame(root, width=500)
+main_frame.pack(side=LEFT, fill="x", padx=10)
 lbl_number = Label(
     main_frame, text="Enter the number:", font=FONT_LABEL, fg=LABEL_COLOR
 )
@@ -89,42 +118,6 @@ opt_currency.pack(expand=True, fill="x")
 lbl_text = Label(main_frame, text="The text", font=FONT_LABEL, fg=LABEL_COLOR)
 lbl_text.pack(expand=True, pady=5)
 number_text = Text(main_frame, width=46, height=4, state="disabled")
-number_text.pack()
-
-bottom_frame = Frame(root, pady=15, padx=15)
-bottom_frame.pack(
-    side="bottom",
-    fill="both",
-    expand=True,
-)
-ttk.Separator(
-    master=bottom_frame,
-    orient=HORIZONTAL,
-    style="blue.TSeparator",
-    class_=ttk.Separator,
-    takefocus=1,
-    cursor="",
-).grid(row=0, column=0, ipadx=12, pady=10)
-
-btn_submit = ttk.Button(bottom_frame, text="Submit", width=10, command=convert_number)
-btn_submit.grid(row=0, column=1, padx=10)
-
-btn_clear = ttk.Button(bottom_frame, text="Clear All", width=10, command=clear_all)
-btn_clear.grid(row=0, column=2, padx=10)
-
-btn_copy = ttk.Button(
-    bottom_frame, text="Copy to Clipboard", width=18, command=copy_text
-)
-btn_copy.grid(row=0, column=3, padx=10)
-
-ttk.Separator(
-    master=bottom_frame,
-    orient=HORIZONTAL,
-    style="blue.TSeparator",
-    class_=ttk.Separator,
-    takefocus=1,
-    cursor="",
-).grid(row=0, column=4, ipadx=12, pady=10)
-
+number_text.pack(padx=5)
 
 root.mainloop()
