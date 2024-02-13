@@ -58,10 +58,18 @@ def copy_text():
         )
 
 
+def exit_app():
+    if messagebox.askyesno("Exit", "Are you sure?"):
+        root.quit()
+    else:
+        clear_all()
+
+
 root = Tk()
 root.title("Num2Word")
 root.geometry("500x320")
 root.resizable(False, False)
+
 
 str_number = StringVar()
 str_number.set("")
@@ -74,7 +82,7 @@ lbl_imagem = Label(right_frame, image=img, width=50, height=50, bg="black")
 lbl_imagem.pack(pady=15)
 
 style = ttk.Style()
-# style.theme_use("vista")
+# style.theme_use("clearlook")
 style.configure("my.TButton", foreground="black", background="black")
 
 btn_submit = ttk.Button(
@@ -91,6 +99,10 @@ btn_copy = ttk.Button(
     right_frame, text="Copy", width=8, command=copy_text, style="my.TButton"
 )
 btn_copy.pack(padx=10, pady=12)
+btn_exit = ttk.Button(
+    right_frame, text="Exit", width=8, command=exit_app, style="my.TButton"
+)
+btn_exit.pack(padx=10, pady=12)
 
 
 main_frame = Frame(root, width=500)
@@ -101,6 +113,7 @@ lbl_number = Label(
 lbl_number.pack(fill="x", expand=True, pady=5)
 txt_number = Entry(main_frame, textvariable=str_number)
 txt_number.pack(fill="x", expand=True, padx=5, pady=5)
+txt_number.focus()
 
 # campo operação
 op = IntVar()
