@@ -65,6 +65,28 @@ def exit_app():
         clear_all()
 
 
+def about():
+    ABOUT_COLOR = "#E3CF57"  # banana color
+    top_about = Toplevel(bg=ABOUT_COLOR)
+    top_about.title("About")
+    top_about.geometry("300x150")
+
+    about_title = Label(
+        top_about,
+        text="NUMBER TO WORDS\nby Jorge",
+        font=("Arial", 10, "bold"),
+        bg=ABOUT_COLOR,
+    )
+    about_text = Label(
+        top_about,
+        text="A simple app to convert a number\nto correspondent words.\n\nATTENTION:\n1. The number must be a float (with decimal point)\n2.'Copy' sends text to clipboard.",
+        font=("Arial", 8, "normal"),
+        bg=ABOUT_COLOR,
+    )
+    about_title.pack()
+    about_text.pack(expand=True, fill="both", padx=5)
+
+
 root = Tk()
 root.title("Num2Word")
 root.geometry("500x320")
@@ -79,7 +101,7 @@ right_frame.pack(side="left", fill="y")
 
 img = ImageTk.PhotoImage(Image.open("images/number.png"))
 lbl_imagem = Label(right_frame, image=img, width=50, height=50, bg="black")
-lbl_imagem.pack(pady=15)
+lbl_imagem.pack(pady=12)
 
 style = ttk.Style()
 # style.theme_use("clearlook")
@@ -88,21 +110,27 @@ style.configure("my.TButton", foreground="black", background="black")
 btn_submit = ttk.Button(
     right_frame, text="Submit", width=8, command=convert_number, style="my.TButton"
 )
-btn_submit.pack(padx=10, pady=12)
+btn_submit.pack(padx=10, pady=10)
 
 btn_clear = ttk.Button(
     right_frame, text="Clear All", width=8, command=clear_all, style="my.TButton"
 )
-btn_clear.pack(padx=10, pady=12)
+btn_clear.pack(padx=10, pady=10)
 
 btn_copy = ttk.Button(
     right_frame, text="Copy", width=8, command=copy_text, style="my.TButton"
 )
-btn_copy.pack(padx=10, pady=12)
+btn_copy.pack(padx=10, pady=10)
+
+btn_about = ttk.Button(
+    right_frame, text="About", width=8, command=about, style="my.TButton"
+)
+btn_about.pack(padx=10, pady=10)
+
 btn_exit = ttk.Button(
     right_frame, text="Exit", width=8, command=exit_app, style="my.TButton"
 )
-btn_exit.pack(padx=10, pady=12)
+btn_exit.pack(padx=10, pady=10)
 
 
 main_frame = Frame(root, width=500)
