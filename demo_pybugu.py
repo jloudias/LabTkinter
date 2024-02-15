@@ -15,7 +15,9 @@ class DemoApp:
         self.lbl_question = ttk.Label(self.frame_main, name="lbl_question")
         self.lbl_question.configure(text="What is my favorite programming language?")
         self.lbl_question.grid(column=0, row=0)
-        self.entry2 = ttk.Entry(self.frame_main)  # add self
+        self.entry2 = ttk.Entry(
+            self.frame_main
+        )  # add self -> you must define an id for the widget
         self.entry2.grid(column=0, pady=5, row=1, sticky="ew")
         frame3 = ttk.Frame(self.frame_main)
         frame3.configure(height=200, width=200)
