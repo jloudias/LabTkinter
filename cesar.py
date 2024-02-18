@@ -189,7 +189,9 @@ txt_nova_mensagem.grid(column=0, row=6, sticky="W", columnspan=2, padx=PADX, pad
 # FRAME BOTOES
 # ============
 frame_botoes = tk.Frame(frame_direito)
-btn_ok = tk.Button(frame_botoes, text="Ok", width=10, state="disabled", command=aplicar_cesar)
+btn_ok = tk.Button(
+    frame_botoes, text="Ok", width=10, state="disabled", command=aplicar_cesar
+)
 btn_limpar = tk.Button(frame_botoes, text="Limpar", width=10, command=limpar_formulario)
 btn_sair = tk.Button(frame_botoes, text="Sair", width=10, command=root.quit)
 

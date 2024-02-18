@@ -13,6 +13,8 @@
 |number_to_word.py|Converte um número em seu texto|
 |ctk_demo.py|Tela de login (Customtkinter)|
 |demo_pygubu|Tela simples gerada pelo Pygubu|
+|chess|Jogo xadrez em OOP|
+
 
 ### Referências
 
