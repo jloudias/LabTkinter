@@ -1,4 +1,3 @@
-from typing import Any, Tuple
 import customtkinter as ctk
 
 """Same as beginner2a.py, but implementing radio butons on frame_right """
