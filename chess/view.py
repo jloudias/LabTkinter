@@ -31,7 +31,7 @@ class View:
     # MENU BEGIN -------------------------
     #
     def create_top_menu(self):
-        self.menu_bar = Menu(self.parent)  # create menu barr
+        self.menu_bar = Menu(self.parent)  # create menu bar
         self.create_file_menu()
         self.create_edit_menu()
         self.create_about_menu()
