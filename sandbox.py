@@ -16,14 +16,3 @@
 # root.mainloop()
 
 # Learning Dictionary - count word frequency in a text
-corpus = "learn all about python and its potential \
-    you would also learn to create word frequency and all tests python is \
-        can do with and about cesar"
-word_freq = dict()
-corpus_word = str(corpus).split()
-for word in range(len(corpus_word)):
-    if corpus_word[word] not in word_freq:
-        word_freq[corpus_word[word]] = 1
-    else:
-        word_freq[corpus_word[word]] += 1
-print(word_freq)
