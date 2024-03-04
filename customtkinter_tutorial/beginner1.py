@@ -11,7 +11,9 @@ Formulário solicita usuário declare se ama ou odeia o Python. Ao submeter, exi
 """
 
 import customtkinter as ctk
-from tkinter import messagebox
+
+# from tkinter import messagebox
+from CTkMessagebox import CTkMessagebox
 
 root = ctk.CTk()
 root.title("Tutorial")
@@ -25,8 +27,39 @@ root.grid_columnconfigure((0), weight=1)
 def button_clicked():
 
     status = "love" if radio_var.get() == 1 else "hate"
-    messagebox.showinfo(
-        "Info", f"You clicked me!\nBy the way, it seems you {status} Python."
+    CTkMessagebox(
+        title="Information",
+        message=f"You clicked me!\nBy the way, it seems you {status} Python.",
+        # master: Any = None,
+        # width: int = 400,
+        # height: int = 200,
+        option_1="OK",
+        # option_2: str = None,
+        # option_3: str = None,
+        # options: list = [],
+        # border_width=3,
+        # border_color="blue",
+        # button_color: str = "default",
+        # bg_color="#290fe1",
+        # fg_color="white",
+        # text_color: str = "default",
+        # title_color="blue",
+        # button_text_color: str = "default",
+        # button_width: int = None,
+        # button_height: int = None,
+        # cancel_button_color: str = None,
+        # cancel_button: str = None,
+        # button_hover_color: str = "default",
+        # icon="icons/bulb.ico",
+        # icon_size: tuple = None,
+        # corner_radius: int = 15,
+        # justify: str = "right",
+        # font: tuple = None,
+        # header: bool = False,
+        # topmost: bool = True,
+        # fade_in_duration: int = 0,
+        # sound: bool = False,
+        # option_focus: Literal[1, 2, 3] = None
     )
 
 
