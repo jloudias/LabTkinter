@@ -17,9 +17,6 @@ class App(ctk.CTk):
         self.top_title = TopTitle(self)
         self.main = Main(self)
 
-        # run
-        self.mainloop()
-
 
 class TopTitle(ctk.CTkFrame):
     def __init__(self, parent):
@@ -72,4 +69,5 @@ class Main(ctk.CTkFrame):
 
 if __name__ == "__main__":
 
-    App("Login", (500, 400))
+    root = App("Login", (500, 400))
+    root.mainloop()
