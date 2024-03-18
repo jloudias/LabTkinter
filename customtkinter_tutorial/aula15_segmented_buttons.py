@@ -48,6 +48,8 @@ class Main(ctk.CTkFrame):
     def __init__(self, master):
         super().__init__(master)
 
+        v_theme = ctk.StringVar()
+
         def show_image(value):
 
             match value:
@@ -60,6 +62,13 @@ class Main(ctk.CTkFrame):
 
             self.lbl_image.configure(image=v_image)
             self.lbl_image.pack(pady=40)
+
+        def toggle_theme():
+            print(v_theme.get())
+            if v_theme == "light":
+                ctk.set_appearance_mode("light")
+            else:
+                ctk.set_appearance_mode("dark")
 
         self.btn_segmented = ctk.CTkSegmentedButton(
             master=self,
@@ -86,6 +95,35 @@ class Main(ctk.CTkFrame):
         self.btn_segmented.pack()
 
         self.lbl_image = ctk.CTkLabel(self, text="", width=120, height=120)
+
+        self.theme_mode = ctk.CTkSwitch(
+            self,
+            width=100,
+            height=24,
+            switch_width=36,
+            switch_height=18,
+            # corner_radius = None,
+            # border_width = None,
+            # button_length= None,
+            # bg_color = "transparent",
+            # fg_color= None,
+            # border_color= "transparent",
+            # progress_color= None,
+            # button_color = None,
+            # button_hover_color= None,
+            # text_color = None,
+            # text_color_disabled= None,
+            text="Toggle Theme",
+            # font = None,
+            # textvariable= None,
+            onvalue="dark",
+            offvalue="light",
+            variable=v_theme,
+            # hover= True,
+            command=toggle_theme,
+            # state= tkinter.NORMAL
+        )
+        self.theme_mode.pack(pady=30)
 
         self.pack(expand=True, fill="both")
 
